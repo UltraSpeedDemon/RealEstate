@@ -1,4 +1,3 @@
-# RealEstate
 <h1>Name : RealHomes<h1>
 <p>Real Estate List - List of houses or apartments, displaying the name, square footage, value, rooms,
 images displaying each residence for sale, etc.</p>
