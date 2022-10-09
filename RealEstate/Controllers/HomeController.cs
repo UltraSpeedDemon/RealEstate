@@ -2,6 +2,11 @@
 using RealEstate.Models;
 using System.Diagnostics;
 
+//Real Estate List - List of houses or apartments, displaying the name, square footage, value, rooms,
+//images displaying each residence for sale, etc.
+//The purpose is for the users to view/compare prices and differences between properties.
+//Users will also have the ability to click on different properties to view more information/descriptions about them.
+
 namespace RealEstate.Controllers
 {
     public class HomeController : Controller
