@@ -4,7 +4,7 @@ namespace RealEstate.Models
 {
     public class ForSale
     {
-        public int HomeID { get; set; }
+        public int ForSaleId { get; set; } //primary key
 
         [Required]
         [MaxLength(100)]    
@@ -23,6 +23,12 @@ namespace RealEstate.Models
         public string? Description { get; set; }
         public string? Photo { get; set; }
 
+        [Required]
+        public int Rooms { get; set; }
+
+        [Required]
+        public int SqFootage { get; set; }
+
         //Parent Category
         [Display(Name = "City")]
         [Required]
@@ -30,11 +36,5 @@ namespace RealEstate.Models
 
         [Required]
         public City? City { get; set; }
-
-        [Required]
-        public int Rooms { get; set; }
-
-        [Required]
-        public int SqFootage { get; set; }
     }
 }
