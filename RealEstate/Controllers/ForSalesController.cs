@@ -22,7 +22,8 @@ namespace RealEstate.Controllers
         // GET: ForSales
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ForSale.ToListAsync());
+            var applicationDbContext = _context.ForSale.Include(p => p.City).OrderBy(p => p.Name);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: ForSales/Details/5
@@ -34,6 +35,7 @@ namespace RealEstate.Controllers
             }
 
             var forSale = await _context.ForSale
+                .Include(p => p.City)
                 .FirstOrDefaultAsync(m => m.ForSaleId == id);
             if (forSale == null)
             {
@@ -46,6 +48,7 @@ namespace RealEstate.Controllers
         // GET: ForSales/Create
         public IActionResult Create()
         {
+            ViewData["CityId"] = new SelectList(_context.Cities.OrderBy(c => c.Name), "CityId", "Name");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
+        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +71,7 @@ namespace RealEstate.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
             return View(forSale);
         }
 
@@ -84,6 +88,7 @@ namespace RealEstate.Controllers
             {
                 return NotFound();
             }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
             return View(forSale);
         }
 
@@ -92,7 +97,7 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
+        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
         {
             if (id != forSale.ForSaleId)
             {
@@ -129,6 +134,7 @@ namespace RealEstate.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
             return View(forSale);
         }
 
@@ -141,6 +147,7 @@ namespace RealEstate.Controllers
             }
 
             var forSale = await _context.ForSale
+                .Include(p => p.City)
                 .FirstOrDefaultAsync(m => m.ForSaleId == id);
             if (forSale == null)
             {
@@ -178,7 +185,7 @@ namespace RealEstate.Controllers
             var filePath = Path.GetTempFileName();
             var fileName = Guid.NewGuid() + "-" + Photo.FileName;
 
-            var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\img\\products\\" + fileName;
+            var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\NewFolder\\NewFolder\\" + fileName;
             using (var stream = new FileStream(uploadPath, FileMode.Create))
             {
                 Photo.CopyTo(stream);

@@ -33,7 +33,7 @@ namespace RealEstate.Models
         //Parent Category
         [Display(Name = "City")]
         [Required]
-        public int? CityId { get; set; }
+        public int CityId { get; set; }
 
         [Required]
         public City? City { get; set; }

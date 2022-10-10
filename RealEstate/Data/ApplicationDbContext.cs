@@ -10,7 +10,7 @@ namespace RealEstate.Data
             : base(options)
         {
         }
-        public DbSet<RealEstate.Models.City> City { get; set; }
+        public DbSet<RealEstate.Models.City> Cities { get; set; }
         public DbSet<RealEstate.Models.ForSale> ForSale { get; set; }
     }
 }
