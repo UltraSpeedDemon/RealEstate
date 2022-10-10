@@ -12,6 +12,7 @@ namespace RealEstate.Models
 
         [Required]
         [MaxLength(50)]
+        [Display(Name = "City Code")]
         public string? AreaCode { get; set; }
 
         //child ref

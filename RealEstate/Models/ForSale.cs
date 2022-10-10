@@ -27,12 +27,13 @@ namespace RealEstate.Models
         public int Rooms { get; set; }
 
         [Required]
+        [Display(Name = "Square Footage")]
         public int SqFootage { get; set; }
 
         //Parent Category
         [Display(Name = "City")]
         [Required]
-        public string CityId { get; set; }
+        public int? CityId { get; set; }
 
         [Required]
         public City? City { get; set; }

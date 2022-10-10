@@ -54,10 +54,16 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale)
+        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
         {
             if (ModelState.IsValid)
             {
+                if (Photo != null)
+                {
+                    var fileName = UploadPhoto(Photo);
+                    forSale.Photo = fileName;
+                }
+
                 _context.Add(forSale);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +92,7 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale)
+        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
         {
             if (id != forSale.ForSaleId)
             {
@@ -95,8 +101,18 @@ namespace RealEstate.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
+                try 
+                { 
+                    if(UploadPhoto != null)
+                    {
+                        var fileName = UploadPhoto(Photo);
+                        forSale.Photo = fileName;
+                    }
+                    else
+                    {
+                        forSale.Photo = CurrentPhoto;
+                    }
+                
                     _context.Update(forSale);
                     await _context.SaveChangesAsync();
                 }
@@ -105,7 +121,7 @@ namespace RealEstate.Controllers
                     if (!ForSaleExists(forSale.ForSaleId))
                     {
                         return NotFound();
-                    }
+                    }  
                     else
                     {
                         throw;
@@ -156,6 +172,19 @@ namespace RealEstate.Controllers
         private bool ForSaleExists(int id)
         {
           return _context.ForSale.Any(e => e.ForSaleId == id);
+        }
+        private static string UploadPhoto(IFormFile Photo)
+        {
+            var filePath = Path.GetTempFileName();
+            var fileName = Guid.NewGuid() + "-" + Photo.FileName;
+
+            var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\img\\products\\" + fileName;
+            using (var stream = new FileStream(uploadPath, FileMode.Create))
+            {
+                Photo.CopyTo(stream);
+            }
+
+            return fileName;
         }
     }
 }
