@@ -57,8 +57,9 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
+        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
         {
+            ModelState.Remove("City");
             if (ModelState.IsValid)
             {
                 if (Photo != null)
@@ -97,13 +98,13 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
+        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
         {
             if (id != forSale.ForSaleId)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("City");
             if (ModelState.IsValid)
             {
                 try 
@@ -181,8 +182,7 @@ namespace RealEstate.Controllers
           return _context.ForSale.Any(e => e.ForSaleId == id);
         }
         private static string UploadPhoto(IFormFile Photo)
-        {
-            var filePath = Path.GetTempFileName();
+        { 
             var fileName = Guid.NewGuid() + "-" + Photo.FileName;
 
             var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\NewFolder\\NewFolder\\" + fileName;

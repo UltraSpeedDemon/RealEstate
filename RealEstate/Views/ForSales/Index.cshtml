@@ -49,7 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo)
+                @if (item.Photo != null) {
+                    <img src="~/NewFolder/NewFolder/@item.Photo" alt="House Image" class="thumb" />
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rooms)
