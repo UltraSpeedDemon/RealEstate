@@ -5,3 +5,5 @@ images displaying each residence for sale, etc.</p>
 <p>Users will also have the ability to click on different properties to view more information/descriptions about them.</p>
 
 Website : https://realhomes.azurewebsites.net 
+
+CSS is original made by myself. Theme is Red and Black.
