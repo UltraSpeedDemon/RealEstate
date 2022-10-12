@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.SqFootage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CityId)
+                @Html.DisplayNameFor(model => model.City)
             </th>
             <th></th>
         </tr>
@@ -60,7 +60,7 @@
                 @Html.DisplayFor(modelItem => item.SqFootage)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CityId)
+                @Html.DisplayFor(modelItem => item.City.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ForSaleId">Edit</a> |

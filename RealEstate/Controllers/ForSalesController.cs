@@ -98,7 +98,7 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo, string? CurrentPhoto)
+        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, string? CurrentPhoto)
         {
             if (id != forSale.ForSaleId)
             {
@@ -108,17 +108,7 @@ namespace RealEstate.Controllers
             if (ModelState.IsValid)
             {
                 try 
-                { 
-                    if(UploadPhoto != null)
-                    {
-                        var fileName = UploadPhoto(Photo);
-                        forSale.Photo = fileName;
-                    }
-                    else
-                    {
-                        forSale.Photo = CurrentPhoto;
-                    }
-                
+                {      
                     _context.Update(forSale);
                     await _context.SaveChangesAsync();
                 }
@@ -183,9 +173,9 @@ namespace RealEstate.Controllers
         }
         private static string UploadPhoto(IFormFile Photo)
         { 
-            var fileName = Guid.NewGuid() + "-" + Photo.FileName;
+            var fileName = Guid.NewGuid() + "-" + Photo.FileName; //encrypts picture
 
-            var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\NewFolder\\NewFolder\\" + fileName;
+            var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\NewFolder\\NewFolder\\" + fileName; //folder ** unable to change name for some reason
             using (var stream = new FileStream(uploadPath, FileMode.Create))
             {
                 Photo.CopyTo(stream);
