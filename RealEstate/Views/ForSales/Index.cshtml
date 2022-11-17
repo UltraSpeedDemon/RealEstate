@@ -5,10 +5,12 @@
 }
 
 <h1>Current Listings!</h1>
-
-<p>
-    <a asp-action="Create">Create a New Property</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Create a New Property</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -62,11 +64,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.City.Name)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ForSaleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ForSaleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ForSaleId">Delete</a>
-            </td>
+    @if (User.IsInRole("Administrator"))
+    {
+         <td>
+            <a asp-action="Edit" asp-route-id="@item.ForSaleId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.ForSaleId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.ForSaleId">Delete</a>
+         </td>
+    }
         </tr>
 }
     </tbody>

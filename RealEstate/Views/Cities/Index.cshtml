@@ -5,10 +5,12 @@
 }
 
 <h1>Cities with Available Listings</h1>
-
-<p>
-    <a asp-action="Create">Add a New City</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Add a New City</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -30,11 +32,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.AreaCode)
             </td>
-            <td>
+            @if (User.IsInRole("Administrator"))
+            {
+             <td>
                 <a asp-action="Edit" asp-route-id="@item.CityId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.CityId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.CityId">Delete</a>
-            </td>
+             </td>
+            }
         </tr>
 }
     </tbody>
