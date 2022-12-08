@@ -35,7 +35,7 @@ namespace RealEstate.Controllers
         {
             if (id == null || _context.ForSale == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var forSale = await _context.ForSale
@@ -43,17 +43,17 @@ namespace RealEstate.Controllers
                 .FirstOrDefaultAsync(m => m.ForSaleId == id);
             if (forSale == null)
             {
-                return NotFound();
+                return View("404");
             }
 
-            return View(forSale);
+            return View("Details", forSale);
         }
 
         // GET: ForSales/Create
         public IActionResult Create()
         {
             ViewData["CityId"] = new SelectList(_context.Cities.OrderBy(c => c.Name), "CityId", "Name");
-            return View();
+            return View("Create");
         }
 
         // POST: ForSales/Create
@@ -61,23 +61,18 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, IFormFile? Photo)
+        public async Task<IActionResult> Create([Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale)
         {
             ModelState.Remove("City");
             if (ModelState.IsValid)
             {
-                if (Photo != null)
-                {
-                    var fileName = UploadPhoto(Photo);
-                    forSale.Photo = fileName;
-                }
 
                 _context.Add(forSale);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
-            return View(forSale);
+            return View("Create", forSale);
         }
 
         // GET: ForSales/Edit/5
@@ -85,16 +80,16 @@ namespace RealEstate.Controllers
         {
             if (id == null || _context.ForSale == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var forSale = await _context.ForSale.FindAsync(id);
             if (forSale == null)
             {
-                return NotFound();
+                return View("404");
             }
             ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
-            return View(forSale);
+            return View("Edit", forSale);
         }
 
         // POST: ForSales/Edit/5
@@ -102,11 +97,11 @@ namespace RealEstate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale, string? CurrentPhoto)
+        public async Task<IActionResult> Edit(int id, [Bind("ForSaleId,Name,Price,Description,Photo,Rooms,SqFootage,CityId")] ForSale forSale)
         {
             if (id != forSale.ForSaleId)
             {
-                return NotFound();
+                return View("404");
             }
             ModelState.Remove("City");
             if (ModelState.IsValid)
@@ -120,7 +115,7 @@ namespace RealEstate.Controllers
                 {
                     if (!ForSaleExists(forSale.ForSaleId))
                     {
-                        return NotFound();
+                        return View("404");
                     }  
                     else
                     {
@@ -130,7 +125,7 @@ namespace RealEstate.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "Name", forSale.CityId);
-            return View(forSale);
+            return View("Edit", forSale);
         }
 
         // GET: ForSales/Delete/5
@@ -138,7 +133,7 @@ namespace RealEstate.Controllers
         {
             if (id == null || _context.ForSale == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var forSale = await _context.ForSale
@@ -146,10 +141,10 @@ namespace RealEstate.Controllers
                 .FirstOrDefaultAsync(m => m.ForSaleId == id);
             if (forSale == null)
             {
-                return NotFound();
+                return View("404");
             }
 
-            return View(forSale);
+            return View("Delete", forSale);
         }
 
         // POST: ForSales/Delete/5
@@ -171,11 +166,12 @@ namespace RealEstate.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ForSaleExists(int id)
+        private bool ForSaleExists(int id) //private
         {
           return _context.ForSale.Any(e => e.ForSaleId == id);
         }
-        private static string UploadPhoto(IFormFile Photo)
+        
+        private static string UploadPhoto(IFormFile Photo) //Not Covered in the Unit Tests --- unable to cover Photo Method
         { 
             var fileName = Guid.NewGuid() + "-" + Photo.FileName; //encrypts picture
 
