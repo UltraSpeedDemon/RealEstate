@@ -26,7 +26,7 @@ namespace RealEstate.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.ForSale.Include(p => p.City).OrderBy(p => p.Name);
-            return View(await applicationDbContext.ToListAsync());
+            return View("Index", await applicationDbContext.ToListAsync());
         }
 
         // GET: ForSales/Details/5
